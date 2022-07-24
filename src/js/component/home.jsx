@@ -1,25 +1,49 @@
-import React from "react";
+import React, {useState} from "react";
+import TareaForm from "./TareaForm";
+import Tarea from "./Tarea";
 
 //include images into your bundle
 import rigoImage from "../../img/rigo-baby.jpg";
 
 //create your first component
-const Home = () => {
+function Home () {
+const [listaTareas, setListaTareas] = useState([]);
+
+const nuevaTarea = (tarea) => {
+setListaTareas([tarea, ...listaTareas])
+}
+
+const borrar = (id) => {
+	const listaFiltrada = listaTareas.filter((e, index) => index !== id);
+	setListaTareas(listaFiltrada);
+}
+
+const actualizarTarea = (id, tarea) => {
+     const listaActualizada = listaTareas.map((e, index) => {
+		if(index === id){
+			e = tarea;
+		}
+		return e;
+	 })
+
+	 setListaTareas(listaActualizada);
+}
+
 	return (
-		<div className="text-center">
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
-		</div>
+	<div className="App">
+    <TareaForm 
+	nuevaTarea={nuevaTarea}
+	/>
+
+	<div className="lista">
+
+	{
+    listaTareas.map((e, index) => <Tarea tarea={e} borrar={borrar} id={index} editar={actualizarTarea} />)
+	}
+	
+	</div>
+
+	</div>
 	);
 };
 
